@@ -38,7 +38,7 @@ public enum CategoryType {
                 return x;
             }
         }
-        throw new IllegalArgumentException("Invalid id: " + id);
+        throw new IllegalArgumentException("Id inválido: " + id);
     }
 
     public static CategoryType toEnum(String description) {
@@ -52,6 +52,6 @@ public enum CategoryType {
                 return x;
             }
         }
-        throw new IllegalArgumentException("Invalid description: " + description);
+        throw new IllegalArgumentException("Categoria inválida: " + description);
     }
 }

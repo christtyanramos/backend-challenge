@@ -1,14 +1,13 @@
 package br.com.itau.insurance.core.usecase;
 
 import br.com.itau.insurance.core.usecase.model.Product;
-import br.com.itau.insurance.core.usecase.model.enums.CategoryType;
 import br.com.itau.insurance.dataprovider.ProductIntegration;
-import br.com.itau.insurance.dataprovider.persistence.entity.ProductEntity;
+import br.com.itau.insurance.exception.InvalidProductIdException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import static br.com.itau.insurance.core.usecase.utils.UseCaseUtils.buildProduct;
+import static br.com.itau.insurance.core.usecase.utils.UseCaseUtils.evaluateChargePrice;
 
 @Service
 @RequiredArgsConstructor
@@ -21,26 +20,9 @@ public class ProductUpdaterUseCase {
         if (productIntegration.findById(product.getId()).isPresent()) {
             product.setChargePrice(evaluateChargePrice(product.getStandardPrice(), product.getCategory()));
             var entity = productIntegration.update(product);
-            var response = buildProduct(entity);
-            return response;
+            return buildProduct(entity);
         }
-        throw new RuntimeException(); //TODO
+        throw new InvalidProductIdException(product.getId());
     }
 
-    private BigDecimal evaluateChargePrice(BigDecimal standardPrice, CategoryType categoryType) {
-        BigDecimal iof = standardPrice.multiply(categoryType.getIof());
-        BigDecimal pis = standardPrice.multiply(categoryType.getPis());
-        BigDecimal cofins = standardPrice.multiply(categoryType.getCofins());
-        return standardPrice.add(iof).add(pis).add(cofins).setScale(2, RoundingMode.HALF_DOWN);
-    }
-
-    private Product buildProduct(ProductEntity entity) {
-        return Product.builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .category(CategoryType.toEnum(entity.getCategory()))
-                .standardPrice(entity.getStandardPrice())
-                .chargePrice(entity.getChargePrice())
-                .build();
-    }
 }

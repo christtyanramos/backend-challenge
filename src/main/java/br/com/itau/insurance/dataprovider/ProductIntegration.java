@@ -3,6 +3,7 @@ package br.com.itau.insurance.dataprovider;
 import br.com.itau.insurance.core.usecase.model.Product;
 import br.com.itau.insurance.dataprovider.persistence.ProductRepository;
 import br.com.itau.insurance.dataprovider.persistence.entity.ProductEntity;
+import br.com.itau.insurance.exception.IntegrationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,29 +17,34 @@ public class ProductIntegration {
     private final ProductRepository productRepository;
 
     public Optional<ProductEntity> findById(UUID id) {
-       return productRepository.findById(id);
+        return productRepository.findById(id);
     }
 
     public ProductEntity create(Product product) {
-        var entity = ProductEntity.builder()
-                .name(product.getName())
-                .category(product.getCategory().getId())
-                .standardPrice(product.getStandardPrice())
-                .chargePrice(product.getChargePrice())
-                .build();
-
-        return productRepository.save(entity);
+        try {
+            var entity = buildProductEntity(product);
+            return productRepository.save(entity);
+        } catch (Exception exception) {
+            throw new IntegrationException("PRODUCT_CREATE_INTEGRATION_ERROR", "Erro ao tentar criar produto.", exception);
+        }
     }
 
     public ProductEntity update(Product product) {
-        var entity = ProductEntity.builder()
-                .id(product.getId())
+        try {
+            var entity = buildProductEntity(product);
+            return productRepository.save(entity);
+        } catch (Exception exception) {
+            throw new IntegrationException("PRODUCT_UPDATE_INTEGRATION_ERROR", "Erro ao tentar atualizar produto.", exception);
+        }
+    }
+
+    private static ProductEntity buildProductEntity(Product product) {
+        return ProductEntity.builder()
+                .id(product.getId() != null ? product.getId() : null)
                 .name(product.getName())
                 .category(product.getCategory().getId())
                 .standardPrice(product.getStandardPrice())
                 .chargePrice(product.getChargePrice())
                 .build();
-
-        return productRepository.save(entity);
     }
 }
