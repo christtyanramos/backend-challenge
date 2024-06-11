@@ -17,7 +17,11 @@ public class ProductIntegration {
     private final ProductRepository productRepository;
 
     public Optional<ProductEntity> findById(UUID id) {
-        return productRepository.findById(id);
+        try {
+            return productRepository.findById(id);
+        } catch (Exception exception) {
+            throw new IntegrationException("PRODUCT_FIND_BY_ID_INTEGRATION_ERROR", "Erro ao tentar localizar produto.", exception);
+        }
     }
 
     public ProductEntity create(Product product) {
