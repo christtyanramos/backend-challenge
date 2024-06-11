@@ -9,11 +9,6 @@ public class InvalidProductIdException extends BusinessException {
 
     private final UUID id;
 
-    public InvalidProductIdException() {
-        super("INVALID_PRODUCT_ID", "Id inválido ou não encontrado");
-        this.id = null;
-    }
-
     public InvalidProductIdException(UUID id) {
         super("INVALID_PRODUCT_ID", "Id inválido ou não encontrado. Id: " + id);
         this.id = id;

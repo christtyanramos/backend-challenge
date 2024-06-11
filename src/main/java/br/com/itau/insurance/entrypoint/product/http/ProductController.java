@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import static br.com.itau.insurance.entrypoint.product.http.examples.ProductExamples.PRODUCT_REQUEST_EXAMPLE;
 
-@Tag(name = "Insurance", description = "Desafio Produtos de Seguros")
+@Tag(name = "Products", description = "Desafio Produtos de Seguros")
 public interface ProductController {
 
     @Operation(summary = "Cria o produto")
