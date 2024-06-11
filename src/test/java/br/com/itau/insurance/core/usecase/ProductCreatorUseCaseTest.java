@@ -1,8 +1,8 @@
 package br.com.itau.insurance.core.usecase;
 
+import br.com.itau.insurance.core.ProductIntegration;
 import br.com.itau.insurance.core.usecase.model.Product;
 import br.com.itau.insurance.core.usecase.model.enums.CategoryType;
-import br.com.itau.insurance.dataprovider.ProductIntegration;
 import br.com.itau.insurance.dataprovider.persistence.entity.ProductEntity;
 import br.com.itau.insurance.exception.IntegrationException;
 import org.junit.jupiter.api.BeforeEach;

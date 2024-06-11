@@ -5,7 +5,7 @@ import br.com.itau.insurance.core.usecase.ProductUpdaterUseCase;
 import br.com.itau.insurance.core.usecase.model.Product;
 import br.com.itau.insurance.core.usecase.model.enums.CategoryType;
 import br.com.itau.insurance.entrypoint.product.http.converter.ProductRequestDTOToProductConverter;
-import br.com.itau.insurance.entrypoint.product.http.converter.ProductResponseToProductResponseDTOConverter;
+import br.com.itau.insurance.entrypoint.product.http.converter.ProductToProductResponseDTOConverter;
 import br.com.itau.insurance.entrypoint.product.http.dto.request.ProductRequestDTO;
 import br.com.itau.insurance.entrypoint.product.http.dto.response.ProductResponseDTO;
 import org.junit.jupiter.api.DisplayName;
@@ -51,7 +51,7 @@ class ProductControllerImplTest {
     private ProductRequestDTOToProductConverter productRequestDTOToProductConverter;
 
     @MockBean
-    private ProductResponseToProductResponseDTOConverter productResponseToProductResponseDTOConverter;
+    private ProductToProductResponseDTOConverter productToProductResponseDTOConverter;
 
     @Test
     @DisplayName("Should create product successfully")
@@ -60,7 +60,7 @@ class ProductControllerImplTest {
 
         when(productRequestDTOToProductConverter.parseObject(any(ProductRequestDTO.class))).thenReturn(getProductMock(null));
         when(productCreatorUseCase.execute(any(Product.class))).thenReturn(getProductMock("1b4147af-74fb-40ff-bd5b-039340feef1d"));
-        when(productResponseToProductResponseDTOConverter.parseObject(any(Product.class))).thenReturn(getProductResponseDTOMock());
+        when(productToProductResponseDTOConverter.parseObject(any(Product.class))).thenReturn(getProductResponseDTOMock());
 
         // WHEN calls post
         mockMvc.perform(MockMvcRequestBuilders.post("/api/products")
@@ -74,7 +74,7 @@ class ProductControllerImplTest {
         // AND verify calls
         verify(productRequestDTOToProductConverter, times(1)).parseObject(any(ProductRequestDTO.class));
         verify(productCreatorUseCase, times(1)).execute(any(Product.class));
-        verify(productResponseToProductResponseDTOConverter, times(1)).parseObject(any(Product.class));
+        verify(productToProductResponseDTOConverter, times(1)).parseObject(any(Product.class));
     }
 
     @Test
@@ -84,7 +84,7 @@ class ProductControllerImplTest {
 
         when(productRequestDTOToProductConverter.parseObject(any(ProductRequestDTO.class))).thenReturn(getProductMock("1b4147af-74fb-40ff-bd5b-039340feef1d"));
         when(productUpdaterUseCase.execute(any(Product.class))).thenReturn(getProductMock("1b4147af-74fb-40ff-bd5b-039340feef1d"));
-        when(productResponseToProductResponseDTOConverter.parseObject(any(Product.class))).thenReturn(getProductResponseDTOMock());
+        when(productToProductResponseDTOConverter.parseObject(any(Product.class))).thenReturn(getProductResponseDTOMock());
 
         // WHEN calls post
         mockMvc.perform(MockMvcRequestBuilders.put("/api/products/1b4147af-74fb-40ff-bd5b-039340feef1d")
@@ -98,7 +98,7 @@ class ProductControllerImplTest {
         // AND verify calls
         verify(productRequestDTOToProductConverter, times(1)).parseObject(anyString(), any(ProductRequestDTO.class));
         verify(productUpdaterUseCase, times(1)).execute(any());
-        verify(productResponseToProductResponseDTOConverter, times(1)).parseObject(any());
+        verify(productToProductResponseDTOConverter, times(1)).parseObject(any());
     }
 
     private ProductResponseDTO getProductResponseDTOMock() {

@@ -27,17 +27,17 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class ProductIntegrationTest {
+class ProductIntegrationImplTest {
 
     @Mock
     private ProductRepository productRepository;
 
     @InjectMocks
-    private ProductIntegration productIntegration;
+    private ProductIntegrationImpl productIntegrationImpl;
 
     @BeforeEach
     void setUp() {
-        productIntegration = new ProductIntegration(productRepository);
+        productIntegrationImpl = new ProductIntegrationImpl(productRepository);
     }
 
     @Test
@@ -49,7 +49,7 @@ class ProductIntegrationTest {
         doReturn(Optional.of(getProductEntityMock())).when(productRepository).findById(any(UUID.class));
 
         // WHEN execute productIntegration
-        Optional<ProductEntity> productResponse = productIntegration.findById(productId);
+        Optional<ProductEntity> productResponse = productIntegrationImpl.findById(productId);
 
         // THEN verify calls
         verify(productRepository, times(1)).findById(any(UUID.class));
@@ -67,7 +67,7 @@ class ProductIntegrationTest {
         doReturn(getProductEntityMock()).when(productRepository).save(any(ProductEntity.class));
 
         // WHEN execute productIntegration
-        ProductEntity productResponse = productIntegration.create(product);
+        ProductEntity productResponse = productIntegrationImpl.create(product);
 
         // THEN verify calls
         verify(productRepository, times(1)).save(any());
@@ -85,7 +85,7 @@ class ProductIntegrationTest {
         doReturn(getProductEntityMock()).when(productRepository).save(any(ProductEntity.class));
 
         // WHEN execute productIntegration
-        ProductEntity productResponse = productIntegration.update(product);
+        ProductEntity productResponse = productIntegrationImpl.update(product);
 
         // THEN verify calls
         verify(productRepository, times(1)).save(any());
@@ -103,7 +103,7 @@ class ProductIntegrationTest {
 
         // WHEN execute productIntegration
         assertThrows(IntegrationException.class, () ->
-                productIntegration.findById(UUID.fromString("efa433b3-0d42-488d-ade8-bff27e68f222")));
+                productIntegrationImpl.findById(UUID.fromString("efa433b3-0d42-488d-ade8-bff27e68f222")));
 
         // THEN verify calls
         verify(productRepository, times(1)).findById(any(UUID.class));
@@ -118,7 +118,7 @@ class ProductIntegrationTest {
 
         // WHEN execute productIntegration
         assertThrows(IntegrationException.class, () ->
-                productIntegration.create(getProductMock(null)));
+                productIntegrationImpl.create(getProductMock(null)));
 
         // THEN verify calls
         verify(productRepository, times(1)).save(any(ProductEntity.class));
@@ -133,7 +133,7 @@ class ProductIntegrationTest {
 
         // WHEN execute productIntegration
         assertThrows(IntegrationException.class, () ->
-                productIntegration.update(getProductMock("efa433b3-0d42-488d-ade8-bff27e68f222")));
+                productIntegrationImpl.update(getProductMock("efa433b3-0d42-488d-ade8-bff27e68f222")));
 
         // THEN verify calls
         verify(productRepository, times(1)).save(any(ProductEntity.class));

@@ -1,7 +1,7 @@
 package br.com.itau.insurance.core.usecase;
 
+import br.com.itau.insurance.core.ProductIntegration;
 import br.com.itau.insurance.core.usecase.model.Product;
-import br.com.itau.insurance.dataprovider.ProductIntegration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

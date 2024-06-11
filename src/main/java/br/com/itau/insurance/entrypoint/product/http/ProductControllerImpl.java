@@ -3,7 +3,7 @@ package br.com.itau.insurance.entrypoint.product.http;
 import br.com.itau.insurance.core.usecase.ProductCreatorUseCase;
 import br.com.itau.insurance.core.usecase.ProductUpdaterUseCase;
 import br.com.itau.insurance.entrypoint.product.http.converter.ProductRequestDTOToProductConverter;
-import br.com.itau.insurance.entrypoint.product.http.converter.ProductResponseToProductResponseDTOConverter;
+import br.com.itau.insurance.entrypoint.product.http.converter.ProductToProductResponseDTOConverter;
 import br.com.itau.insurance.entrypoint.product.http.dto.request.ProductRequestDTO;
 import br.com.itau.insurance.entrypoint.product.http.dto.response.ProductResponseDTO;
 import jakarta.validation.Valid;
@@ -32,7 +32,7 @@ public class ProductControllerImpl implements ProductController {
 
     // Converters
     private final ProductRequestDTOToProductConverter productRequestDTOToProductConverter;
-    private final ProductResponseToProductResponseDTOConverter productResponseToProductResponseDTOConverter;
+    private final ProductToProductResponseDTOConverter productToProductResponseDTOConverter;
 
     @Override
     @PostMapping
@@ -41,7 +41,7 @@ public class ProductControllerImpl implements ProductController {
 
         var request = productRequestDTOToProductConverter.parseObject(requestDTO);
         var response = productCreatorUseCase.execute(request);
-        var responseDTO = productResponseToProductResponseDTOConverter.parseObject(response);
+        var responseDTO = productToProductResponseDTOConverter.parseObject(response);
 
         logger.info("Finalizando requisição de criação de produto. " + responseDTO);
 
@@ -56,7 +56,7 @@ public class ProductControllerImpl implements ProductController {
 
         var request = productRequestDTOToProductConverter.parseObject(id, requestDTO);
         var response = productUpdaterUseCase.execute(request);
-        var responseDTO = productResponseToProductResponseDTOConverter.parseObject(response);
+        var responseDTO = productToProductResponseDTOConverter.parseObject(response);
 
         logger.info("Finalizando requisição de atualização de produto. ", responseDTO);
 

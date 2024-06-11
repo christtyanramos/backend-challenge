@@ -5,7 +5,7 @@ import br.com.itau.insurance.entrypoint.product.http.dto.response.ProductRespons
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProductResponseToProductResponseDTOConverter {
+public class ProductToProductResponseDTOConverter {
 
     public ProductResponseDTO parseObject(Product response) {
         return ProductResponseDTO.builder()
