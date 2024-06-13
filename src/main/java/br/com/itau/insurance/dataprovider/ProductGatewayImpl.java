@@ -1,6 +1,6 @@
 package br.com.itau.insurance.dataprovider;
 
-import br.com.itau.insurance.core.ProductIntegration;
+import br.com.itau.insurance.core.ProductGateway;
 import br.com.itau.insurance.core.usecase.model.Product;
 import br.com.itau.insurance.dataprovider.persistence.ProductRepository;
 import br.com.itau.insurance.dataprovider.persistence.entity.ProductEntity;
@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ProductIntegrationImpl implements ProductIntegration {
+public class ProductGatewayImpl implements ProductGateway {
 
     private final ProductRepository productRepository;
 

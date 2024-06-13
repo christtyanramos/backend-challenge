@@ -27,17 +27,17 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class ProductIntegrationImplTest {
+class ProductGatewayImplTest {
 
     @Mock
     private ProductRepository productRepository;
 
     @InjectMocks
-    private ProductIntegrationImpl productIntegrationImpl;
+    private ProductGatewayImpl productGatewayImpl;
 
     @BeforeEach
     void setUp() {
-        productIntegrationImpl = new ProductIntegrationImpl(productRepository);
+        productGatewayImpl = new ProductGatewayImpl(productRepository);
     }
 
     @Test
@@ -48,8 +48,8 @@ class ProductIntegrationImplTest {
 
         doReturn(Optional.of(getProductEntityMock())).when(productRepository).findById(any(UUID.class));
 
-        // WHEN execute productIntegration
-        Optional<ProductEntity> productResponse = productIntegrationImpl.findById(productId);
+        // WHEN execute productGateway
+        Optional<ProductEntity> productResponse = productGatewayImpl.findById(productId);
 
         // THEN verify calls
         verify(productRepository, times(1)).findById(any(UUID.class));
@@ -66,8 +66,8 @@ class ProductIntegrationImplTest {
 
         doReturn(getProductEntityMock()).when(productRepository).save(any(ProductEntity.class));
 
-        // WHEN execute productIntegration
-        ProductEntity productResponse = productIntegrationImpl.create(product);
+        // WHEN execute productGateway
+        ProductEntity productResponse = productGatewayImpl.create(product);
 
         // THEN verify calls
         verify(productRepository, times(1)).save(any());
@@ -84,8 +84,8 @@ class ProductIntegrationImplTest {
 
         doReturn(getProductEntityMock()).when(productRepository).save(any(ProductEntity.class));
 
-        // WHEN execute productIntegration
-        ProductEntity productResponse = productIntegrationImpl.update(product);
+        // WHEN execute productGateway
+        ProductEntity productResponse = productGatewayImpl.update(product);
 
         // THEN verify calls
         verify(productRepository, times(1)).save(any());
@@ -101,9 +101,9 @@ class ProductIntegrationImplTest {
 
         doThrow(PersistenceException.class).when(productRepository).findById(any(UUID.class));
 
-        // WHEN execute productIntegration
+        // WHEN execute productGateway
         assertThrows(IntegrationException.class, () ->
-                productIntegrationImpl.findById(UUID.fromString("efa433b3-0d42-488d-ade8-bff27e68f222")));
+                productGatewayImpl.findById(UUID.fromString("efa433b3-0d42-488d-ade8-bff27e68f222")));
 
         // THEN verify calls
         verify(productRepository, times(1)).findById(any(UUID.class));
@@ -116,9 +116,9 @@ class ProductIntegrationImplTest {
 
         doThrow(PersistenceException.class).when(productRepository).save(any(ProductEntity.class));
 
-        // WHEN execute productIntegration
+        // WHEN execute productGateway
         assertThrows(IntegrationException.class, () ->
-                productIntegrationImpl.create(getProductMock(null)));
+                productGatewayImpl.create(getProductMock(null)));
 
         // THEN verify calls
         verify(productRepository, times(1)).save(any(ProductEntity.class));
@@ -131,9 +131,9 @@ class ProductIntegrationImplTest {
 
         doThrow(PersistenceException.class).when(productRepository).save(any(ProductEntity.class));
 
-        // WHEN execute productIntegration
+        // WHEN execute productGateway
         assertThrows(IntegrationException.class, () ->
-                productIntegrationImpl.update(getProductMock("efa433b3-0d42-488d-ade8-bff27e68f222")));
+                productGatewayImpl.update(getProductMock("efa433b3-0d42-488d-ade8-bff27e68f222")));
 
         // THEN verify calls
         verify(productRepository, times(1)).save(any(ProductEntity.class));
@@ -145,6 +145,7 @@ class ProductIntegrationImplTest {
                 .name("Seguro de Vida Individual")
                 .category(CategoryType.toEnum("VIDA"))
                 .standardPrice(BigDecimal.valueOf(100.0))
+                .standardPrice(BigDecimal.valueOf(103.2))
                 .build();
     }
 

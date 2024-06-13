@@ -52,6 +52,12 @@
         </dependency>
 
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
@@ -114,6 +120,7 @@
                         <exclude>**/*model/**/*</exclude>
                         <exclude>**/*entity/**/*</exclude>
                         <exclude>**/*dto/**/*</exclude>
+                        <exclude>**/*response/**/*</exclude>
                         <exclude>**/*examples/**/*</exclude>
                         <exclude>**/*InsuranceApplication.class</exclude>
                     </excludes>

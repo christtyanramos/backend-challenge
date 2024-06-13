@@ -1,6 +1,6 @@
 package br.com.itau.insurance.core.usecase;
 
-import br.com.itau.insurance.core.ProductIntegration;
+import br.com.itau.insurance.core.ProductGateway;
 import br.com.itau.insurance.core.usecase.model.Product;
 import br.com.itau.insurance.exception.InvalidProductIdException;
 import lombok.RequiredArgsConstructor;
@@ -13,13 +13,13 @@ import static br.com.itau.insurance.core.usecase.utils.UseCaseUtils.evaluateChar
 @RequiredArgsConstructor
 public class ProductUpdaterUseCase {
 
-    private final ProductIntegration productIntegration;
+    private final ProductGateway productGateway;
 
     public Product execute(Product product) {
 
-        if (productIntegration.findById(product.getId()).isPresent()) {
+        if (productGateway.findById(product.getId()).isPresent()) {
             product.setChargePrice(evaluateChargePrice(product.getStandardPrice(), product.getCategory()));
-            var entity = productIntegration.update(product);
+            var entity = productGateway.update(product);
             return buildProduct(entity);
         }
         throw new InvalidProductIdException(product.getId());

@@ -1,6 +1,6 @@
 package br.com.itau.insurance.core.usecase;
 
-import br.com.itau.insurance.core.ProductIntegration;
+import br.com.itau.insurance.core.ProductGateway;
 import br.com.itau.insurance.core.usecase.model.Product;
 import br.com.itau.insurance.core.usecase.model.enums.CategoryType;
 import br.com.itau.insurance.dataprovider.persistence.entity.ProductEntity;
@@ -31,14 +31,14 @@ import static org.mockito.Mockito.verify;
 class ProductUpdaterUseCaseTest {
 
     @Mock
-    private ProductIntegration productIntegration;
+    private ProductGateway productGateway;
 
     @InjectMocks
     private ProductUpdaterUseCase productUpdaterUseCase;
 
     @BeforeEach
     void setUp() {
-        productUpdaterUseCase = new ProductUpdaterUseCase(productIntegration);
+        productUpdaterUseCase = new ProductUpdaterUseCase(productGateway);
     }
 
     @Test
@@ -47,15 +47,15 @@ class ProductUpdaterUseCaseTest {
         // GIVEN a request to update
         var product = Optional.of(getProductMock());
 
-        doReturn(product).when(productIntegration).findById(any(UUID.class));
-        doReturn(getProductEntityMock()).when(productIntegration).update(any(Product.class));
+        doReturn(product).when(productGateway).findById(any(UUID.class));
+        doReturn(getProductEntityMock()).when(productGateway).update(any(Product.class));
 
         // WHEN execute productUpdaterUseCase
         Product productResponse = productUpdaterUseCase.execute(product.get());
 
         // THEN verify calls
-        verify(productIntegration, times(1)).findById(any(UUID.class));
-        verify(productIntegration, times(1)).update(any(Product.class));
+        verify(productGateway, times(1)).findById(any(UUID.class));
+        verify(productGateway, times(1)).update(any(Product.class));
 
         // AND verify assertions
         assertNotNull(productResponse);
@@ -68,15 +68,15 @@ class ProductUpdaterUseCaseTest {
         // GIVEN a request to update
         var product = Optional.empty();
 
-        doReturn(product).when(productIntegration).findById(any(UUID.class));
+        doReturn(product).when(productGateway).findById(any(UUID.class));
 
         // WHEN execute productUpdaterUseCase
         InvalidProductIdException exception = assertThrows(InvalidProductIdException.class, () ->
                 productUpdaterUseCase.execute(getProductMock()));
 
         // THEN verify calls
-        verify(productIntegration, times(1)).findById(any(UUID.class));
-        verify(productIntegration, times(0)).update(any(Product.class));
+        verify(productGateway, times(1)).findById(any(UUID.class));
+        verify(productGateway, times(0)).update(any(Product.class));
 
         // AND verify assertions
         assertEquals("Id inválido ou não encontrado. Id: efa433b3-0d42-488d-ade8-bff27e68f222", exception.getMessage());
@@ -87,15 +87,15 @@ class ProductUpdaterUseCaseTest {
     void shouldUpdateProductUnsuccessfullyWhenThrowsIntegrationExceptionInFindById() {
         // GIVEN a request to update
 
-        doThrow(IntegrationException.class).when(productIntegration).findById(any(UUID.class));
+        doThrow(IntegrationException.class).when(productGateway).findById(any(UUID.class));
 
         // WHEN execute productUpdaterUseCase
         assertThrows(IntegrationException.class, () ->
                 productUpdaterUseCase.execute(getProductMock()));
 
         // THEN verify calls
-        verify(productIntegration, times(1)).findById(any(UUID.class));
-        verify(productIntegration, times(0)).update(any(Product.class));
+        verify(productGateway, times(1)).findById(any(UUID.class));
+        verify(productGateway, times(0)).update(any(Product.class));
     }
 
     @Test
@@ -104,16 +104,16 @@ class ProductUpdaterUseCaseTest {
         // GIVEN a request to update
         var product = Optional.of(getProductMock());
 
-        doReturn(product).when(productIntegration).findById(any(UUID.class));
-        doThrow(IntegrationException.class).when(productIntegration).update(any(Product.class));
+        doReturn(product).when(productGateway).findById(any(UUID.class));
+        doThrow(IntegrationException.class).when(productGateway).update(any(Product.class));
 
         // WHEN execute productUpdaterUseCase
         assertThrows(IntegrationException.class, () ->
                 productUpdaterUseCase.execute(getProductMock()));
 
         // THEN verify calls
-        verify(productIntegration, times(1)).findById(any(UUID.class));
-        verify(productIntegration, times(1)).update(any(Product.class));
+        verify(productGateway, times(1)).findById(any(UUID.class));
+        verify(productGateway, times(1)).update(any(Product.class));
     }
 
     private Product getProductMock() {

@@ -51,7 +51,7 @@ public class ProductControllerImpl implements ProductController {
     @Override
     @PutMapping(value = "/{id}")
     public ResponseEntity<ProductResponseDTO> update(@PathVariable String id,
-                                                     @RequestBody ProductRequestDTO requestDTO) {
+                                                     @Valid @RequestBody ProductRequestDTO requestDTO) {
         logger.info("Iniciando requisição de atualização de produto. Id:" + id + " " + requestDTO);
 
         var request = productRequestDTOToProductConverter.parseObject(id, requestDTO);

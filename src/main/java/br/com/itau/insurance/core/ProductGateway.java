@@ -6,7 +6,7 @@ import br.com.itau.insurance.dataprovider.persistence.entity.ProductEntity;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface ProductIntegration {
+public interface ProductGateway {
 
     Optional<ProductEntity> findById(UUID id);
 

@@ -1,6 +1,6 @@
 package br.com.itau.insurance.core.usecase;
 
-import br.com.itau.insurance.core.ProductIntegration;
+import br.com.itau.insurance.core.ProductGateway;
 import br.com.itau.insurance.core.usecase.model.Product;
 import br.com.itau.insurance.core.usecase.model.enums.CategoryType;
 import br.com.itau.insurance.dataprovider.persistence.entity.ProductEntity;
@@ -30,14 +30,14 @@ import static org.mockito.Mockito.verify;
 class ProductCreatorUseCaseTest {
 
     @Mock
-    private ProductIntegration productIntegration;
+    private ProductGateway productGateway;
 
     @InjectMocks
     private ProductCreatorUseCase productCreatorUseCase;
 
     @BeforeEach
     void setUp() {
-        productCreatorUseCase = new ProductCreatorUseCase(productIntegration);
+        productCreatorUseCase = new ProductCreatorUseCase(productGateway);
     }
 
     @Test
@@ -46,13 +46,13 @@ class ProductCreatorUseCaseTest {
         // GIVEN a request to create
         var product = Optional.of(getProductMock());
 
-        doReturn(getProductEntityMock()).when(productIntegration).create(any(Product.class));
+        doReturn(getProductEntityMock()).when(productGateway).create(any(Product.class));
 
         // WHEN execute productCreatorUseCase
         Product productResponse = productCreatorUseCase.execute(product.get());
 
         // THEN verify calls
-        verify(productIntegration, times(1)).create(any(Product.class));
+        verify(productGateway, times(1)).create(any(Product.class));
 
         // AND verify assertions
         assertNotNull(productResponse);
@@ -64,14 +64,14 @@ class ProductCreatorUseCaseTest {
     void shouldCreateProductUnsuccessfullyWhenThrowsIntegrationExceptionInFindById() {
         // GIVEN a request to create
 
-        doThrow(IntegrationException.class).when(productIntegration).create(any(Product.class));
+        doThrow(IntegrationException.class).when(productGateway).create(any(Product.class));
 
         // WHEN execute productCreatorUseCase
         assertThrows(IntegrationException.class, () ->
                 productCreatorUseCase.execute(getProductMock()));
 
         // THEN verify calls
-        verify(productIntegration, times(1)).create(any(Product.class));
+        verify(productGateway, times(1)).create(any(Product.class));
     }
 
     private Product getProductMock() {
